@@ -6,6 +6,7 @@ import messagesRouter from './routes/messages.router.js'
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import { Server } from 'socket.io'
+import messageModel from './dao/models/messages.model.js'
 
 const app = express()
 const PORT = 8080
@@ -24,6 +25,7 @@ app.use('/', messagesRouter)
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
+
 app.use(express.static(__dirname + '/public'))
 
 let messages = []
@@ -32,11 +34,16 @@ socketServer.on('connection', socket => {
     socket.emit("messageList", messages)
     console.log("Nuevo cliente conectado")
 
-    socket.on("newMessage", (message) => {
+    socket.on("newMessage", async (message) => {
         messages.push(message)
+        const newMessage = new messageModel({
+            user: "Joaquin",
+            message
+        })
+        await newMessage.save()
         socketServer.emit("newMessage", {
             socketId: socket.id,
             message: message
         })
-    })
+    }) 
 })
