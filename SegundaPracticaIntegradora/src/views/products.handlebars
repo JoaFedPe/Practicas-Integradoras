@@ -1,0 +1,46 @@
+{{#if isValid}}
+<div>
+    <h1>Bienvenido, 
+        <p>Nombre: {{user.first_name}}</p>
+        <p>Apellido: {{user.last_name}}</p>
+    </h1>
+    {{#each docs}}
+    <div>
+        <p>{{this.title}} - {{this.description}} - {{this.code}} - {{this.price}} - {{this.status}} - {{this.stock}}- {{this.category}} </p>
+        <button type="button" id="boton" onclick="addProduct('{{this._id}}')" >Añadir al carrito</button>
+    </div>
+    <br/>
+    {{/each}}
+</div>
+<br/>
+<div>
+    {{#if hasPrevPage}}
+    <a href={{this.prevLink}}>
+           Anterior</a>
+           {{/if}}
+           &nbsp;
+           {{this.page}}
+           &nbsp;
+           {{#if hasNextPage}}
+           <a href={{this.nextLink}}> Siguiente </a>
+           {{/if}}
+</div>
+{{else}}
+<h1>No hay productos que mostrar</h1>
+{{/if}}
+
+<script>
+    
+
+    function addProduct(_id){      
+   
+    fetch('/carts/665087eed80493f67ddcaa0f/product/'+_id,{
+        
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        
+    })
+}
+</script>

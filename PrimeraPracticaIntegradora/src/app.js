@@ -16,7 +16,8 @@ const socketServer = new Server(httpServer)
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
-mongoose.connect("mongodb+srv://joafedpe:Emperor1527@cluster0.izy0ekx.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0").then(()=> {console.log("Conectado a la base de datos")}).catch(error => console.error("Error en la conexion", error))
+mongoose.connect("mongodb+srv://joafedpe:Emperor1527@cluster0.izy0ekx.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0").then(()=> 
+    {console.log("Conectado a la base de datos")}).catch(error => console.error("Error en la conexion", error))
 
 app.use('/', productsRouter)
 app.use('/', cartsRouter)
