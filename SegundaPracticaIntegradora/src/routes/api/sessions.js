@@ -1,5 +1,7 @@
 import { Router } from "express"
 import User from '../../models/user.model.js'
+import Cart from '../../models/carts.model.js'
+import {isAuthenticated, isNotAuthenticated} from '../../middleware/auth.js'
 import passport from 'passport'
 
 
@@ -15,8 +17,11 @@ router.post('/register', async (req, res) => {
             newUser.rol = 'admin';
         } else {
             newUser.rol = 'user';
-        }       
-
+        }
+        
+        const newCart = new Cart()
+        await newCart.save()
+        newUser.cart = newCart._id
         await newUser.save()
         res.redirect('/login')
 
@@ -52,6 +57,10 @@ router.post('/logout', (req, res) => {
         if (err) return res.status(500).send('Error al cerrar sesión')
         res.redirect('/login')    
     })
+})
+
+router.get('/session/current', isAuthenticated, (req, res) => {
+    res.render('profile', {user: req.session.user})
 })
 
 router.get("/github", passport.authenticate("github",{scope:["user:email"]}),async(req,res)=>{})

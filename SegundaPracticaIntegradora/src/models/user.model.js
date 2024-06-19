@@ -8,9 +8,22 @@ const userSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     age: Number,
     password: String,
-    cart:asdasda,//hacer lo del populate para asociar una id de un carrito al usuario
+    cart: {
+        type:[
+            {
+                carrito:{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref:"Carts"
+                }
+            }
+        ]
+    },
     rol: String
 });
+
+userSchema.pre('findOne', function(){
+    this.populate('cart.carrito')
+})
 
 const firstCollection = mongoose.model(userCollection, userSchema);
 
