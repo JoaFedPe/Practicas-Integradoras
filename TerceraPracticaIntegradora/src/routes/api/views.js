@@ -24,6 +24,22 @@ router.get('/passforgotten', (req, res) => {
     res.render('passForgotten')
 })
 
+router.get('/reset-password/:token', (req, res) => {
+    const { token } = req.params
+    let expired = false
+
+    try {
+        jwt.verify(token, process.env.JWT_SECRETKEY)
+    } catch (err) {
+        expired = true
+    }
+
+    res.render('reset-password', {
+        token,
+        expired,
+    })
+})
+
 router.post('/passforgotten', passForgotten)
 
 export default router
