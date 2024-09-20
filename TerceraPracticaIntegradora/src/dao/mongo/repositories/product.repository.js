@@ -9,9 +9,9 @@ const getProductsById = async ({pid}) => {
     return await productModel.findOne({_id:pid})
 }   
 
-const createProduct = async ({title, description, code, price, status, stock, category}) => {
+const createProduct = async ({title, description, code, price, status, stock, category, owner}) => {
         
-    return await productModel.create({title, description, code, price, status, stock, category})
+    return await productModel.create({title, description, code, price, status, stock, category, owner})
 }
 
 const productFound = async ({ code }) => {

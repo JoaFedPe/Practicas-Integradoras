@@ -25,13 +25,20 @@ const getProductsById = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
-    let {title, description, code, price, status, stock, category} = req.body   
+    let {title, description, code, price, status, stock, category} = req.body
+    const owner = req.session.user.email
+    
+    let productAdded = await productsServices.createProduct({title, description, code, price, status, stock, category, owner})
 
-    let productAdded = await productsServices.createProduct({title, description, code, price, status, stock, category})
-
-    res.render('createProduct', {productAdded})
+    if (productAdded.status === 'success') {
+        return res.json(productAdded); 
+    } else {
+        return res.status(400).json(productAdded); 
+    }
+    
 
 }
+
 const createProductPage = async (req, res) => {
     res.render('createProduct')
 }
