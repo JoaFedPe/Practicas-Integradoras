@@ -18,8 +18,8 @@ const getProducts = async (params) => {
 }
 
 const getProductsById = async (params) => {
-    const pid = params
-    let result = await productRepository.getProductsById(pid)
+    const {pid} = params
+    let result = await productRepository.getProductsById({pid})
     
     return result   
       
@@ -56,12 +56,17 @@ const modifyProduct = async (pid, params) => {
     
 }
 
-const deleteProduct = async (params) => {
+const deleteProduct = async (params, userEmail) => {
     const pid = params
+    const product = await productRepository.getProductsById({pid})
 
-    let result = await productRepository.deleteProduct(pid)
-    
-    return result   
+    if(userEmail === product.owner || userEmail === "adminCoder@coder.com"){
+                        
+        let result = await productRepository.deleteProduct(pid)
+        
+        return result
+
+    } else { return ({message: "No tienes permisos para borrar este producto"})}      
       
 }
     

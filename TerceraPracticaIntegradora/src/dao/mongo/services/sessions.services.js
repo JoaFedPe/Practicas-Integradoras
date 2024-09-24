@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import userRepository from '../repositories/user.repository.js'
 
+
 const JWT_SECRETKEY = process.env.JWT_SECRETKEY
 
 const logUserService =  (user, res) => {
@@ -93,4 +94,25 @@ const resetPass = async (params) => {
     }
 }
 
-export default { logUserService, passForgotten, resetPass }
+const getUserById = async (params) => {
+    const {uid} = params
+
+    let result = await userRepository.getUserById({uid})
+    
+    return result 
+}
+
+const changeRole = async (params) => {
+    let {uid} = params
+    
+    const user = await firstCollection.findById(uid)
+    
+    const newRole = user.rol === 'premium' ? 'user' : 'premium'
+        
+    let userToMod = await userRepository.changeRole(uid, newRole)
+
+    return ({result: "success", payload: userToMod}) 
+   
+}
+
+export default { logUserService, passForgotten, resetPass, changeRole, getUserById }

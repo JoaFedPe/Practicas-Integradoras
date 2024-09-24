@@ -45,3 +45,11 @@ export const isUser = (req, res, next) => {
         return res.status(403).json({ message: 'No puedes acceder, solo Usuarios.' })
     }
 };
+
+export const isUserOrPremium = (req, res, next) => {
+    if (req.session.user.rol === 'user' || req.session.user.rol === 'premium') {
+        return next();
+    } else {
+        return res.status(403).json({ message: 'No puedes acceder, solo Admins o usuarios Premium' })
+    }
+};

@@ -17,11 +17,11 @@ const getProducts = async (req, res) => {
 } 
 
 const getProductsById = async (req, res) => {
-    const pid  = req.params
+    const {pid}  = req.params
     
-    let product = await productsServices.getProductsById(pid)
+    let productById = await productsServices.getProductsById({pid})
     
-    res.json(product)
+    res.render('productById', {product: productById})
 }
 
 const createProduct = async (req, res) => {
@@ -52,12 +52,23 @@ const modifyProduct = async (req, res) => {
 }
 
 const deleteProduct = async (req, res) => {
-    const pid  = req.params
-    
-    let productDeleted = await productsServices.deleteProduct(pid)
-    
-    res.json(productDeleted)
+    const {pid}  = req.params
+    let userEmail = req.session.user.email
+
+    try {
+        let productDeleted = await productsServices.deleteProduct(pid, userEmail);
+        
+        
+        if (productDeleted.deletedCount > 0) {
+            res.json({ status: 'success', message: 'Producto eliminado exitosamente!' });
+        } else {
+            res.json({ status: 'error', error: 'No tienes permisos para borrar este producto' });
+        }
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: 'Error al eliminar el producto.' });
+    }
 }
 
-export {getProducts, getProductsById, createProduct, createProductPage, modifyProduct, deleteProduct}
 
+
+export {getProducts, getProductsById, createProduct, createProductPage, modifyProduct, deleteProduct}

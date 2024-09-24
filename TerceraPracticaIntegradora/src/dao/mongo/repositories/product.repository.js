@@ -6,7 +6,7 @@ const getProducts = async ({filters, page, limit, sort}) =>
 
 const getProductsById = async ({pid}) => {
     
-    return await productModel.findOne({_id:pid})
+    return await productModel.findOne({_id:pid}).lean()
 }   
 
 const createProduct = async ({title, description, code, price, status, stock, category, owner}) => {
@@ -26,8 +26,8 @@ const modifyStock = async (productId, stockToModify) => {
     return productModel.updateOne({_id:productId}, {stock:stockToModify})
 }
 
-const deleteProduct = async ({pid}) => {
-    
+const deleteProduct = async (pid) => {
+      
     return await productModel.deleteOne({_id:pid})
 }     
 
